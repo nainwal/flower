@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Khushi - My Madhubala</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: black;
+            font-family: 'Palatino', serif;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Overlay */
+        #overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: black;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100;
+        }
+
+        #overlay h1 { color: #ffd700; margin-bottom: 20px; text-align: center; font-weight: 300; }
+
+        #start-btn {
+            padding: 15px 50px; font-size: 1.1rem;
+            background: transparent; color: #ffd700;
+            border: 1px solid #ffd700; border-radius: 40px;
+            cursor: pointer; transition: 0.4s;
+        }
+
+        #start-btn:hover { background: #ffd700; color: black; box-shadow: 0 0 20px #ffd700; }
+
+        /* Garden */
+        #garden {
+            display: none; width: 100%; height: 100%;
+            position: relative; justify-content: center; align-items: center;
+        }
+
+        /* BIGGER SUNFLOWERS */
+        .sunflower {
+            font-size: 180px; /* Increased size */
+            position: absolute;
+            transition: all 4s ease-in-out;
+            transform: translateX(0) rotateY(0deg);
+            z-index: 10;
+        }
+
+        .animate-sunflowers .flower-left { transform: translateX(-250px) rotateY(65deg); }
+        .animate-sunflowers .flower-right { transform: translateX(250px) rotateY(-65deg); }
+
+        #message {
+            opacity: 0; color: white; text-align: center;
+            font-size: 1.8rem; transition: opacity 2.5s;
+            position: absolute; z-index: 20;
+            text-shadow: 0 0 10px black;
+        }
+
+        .show-message { opacity: 1 !important; }
+
+        /* Falling Petals */
+        .petal {
+            position: fixed;
+            background-color: #ffd700;
+            border-radius: 150% 0 150% 0;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(110vh) translateX(100px) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <h1>A special bloom for my Madhubala</h1>
+        <button id="start-btn">Start Surprise</button>
+    </div>
+
+    <div id="garden">
+        <div id="message">
+            Like a sunflower follows the light,<br>I follow you.
+            <br><span style="color:#ffd700; font-size: 2.2rem; display:block; margin-top:15px;">Happy Flower Day!</span>
+        </div>
+        <div class="sunflower flower-left">🌻</div>
+        <div class="sunflower flower-right">🌻</div>
+    </div>
+
+    <audio id="bg-music">
+        <source src="madhubala.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const btn = document.getElementById('start-btn');
+        const overlay = document.getElementById('overlay');
+        const garden = document.getElementById('garden');
+        const music = document.getElementById('bg-music');
+        const message = document.getElementById('message');
+
+        // Function to create falling petals
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * 100 + "vw";
+            petal.style.width = Math.random() * 15 + 10 + "px";
+            petal.style.height = petal.style.width;
+            petal.style.animationDuration = Math.random() * 3 + 2 + "s";
+            document.body.appendChild(petal);
+
+            // Remove petal after animation
+            setTimeout(() => { petal.remove(); }, 5000);
+        }
+
+        btn.onclick = function() {
+            overlay.style.display = 'none';
+            garden.style.display = 'flex';
+
+            // Start Petal Rain
+            setInterval(createPetal, 200);
+
+            // Attempt Music
+            music.play().catch(e => console.log("Audio play blocked. Check file name."));
+
+            // Flower animation
+            setTimeout(() => {
+                garden.classList.add('animate-sunflowers');
+            }, 100);
+
+            // Message show
+            setTimeout(() => {
+                message.classList.add('show-message');
+            }, 3800);
+        };
+    </script>
+</body>
+</html>
